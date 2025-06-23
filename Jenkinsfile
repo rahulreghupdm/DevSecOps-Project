@@ -41,12 +41,23 @@ pipeline {
         //     }
         // }
 
-        stage('OWASP FS Scan') {
-            steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
+       stage('OWASP FS Scan') {
+    steps {
+        dependencyCheck  odcInstallation: 'DP-Check',
+                         additionalArguments: """
+                           --scan .
+                           --disableYarnAudit
+                           --disableNodeAudit
+                           --format HTML,XML
+                           --out  odc-report
+                           --data \$JENKINS_HOME/odc-data   // persistent cache
+                           --purge                         // safety-net: drop bad DBs
+                         """,
+                         nvdCredentialsId: 'nvd-api-key'   // speeds up updates, avoids 403s
+        dependencyCheckPublisher pattern: 'odc-report/dependency-check-report.xml'
+    }
+}
+
 
         stage('Trivy FS Scan') {
             steps {
