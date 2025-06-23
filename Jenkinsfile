@@ -17,12 +17,6 @@ pipeline {
             }
         }
 
-        stage('Checkout from Git') {
-            steps {
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
-            }
-        }
-
         stage("SonarQube Analysis") {
             steps {
                 withSonarQubeEnv('sonar-server') {
