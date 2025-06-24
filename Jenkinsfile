@@ -18,6 +18,7 @@ pipeline {
         }
         stage('Docker version check'){
             steps{
+                sh "docker rm -f netflix_container || true"
                 sh "docker -v"
 
             }
