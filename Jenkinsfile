@@ -58,13 +58,13 @@ pipeline {
         //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
         //     }
         // }
-       stage("Docker Build & Push"){
-            steps{
-                script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=kbsvkusrbrkjbv -t netflix ."
-                       sh "docker tag netflix rahulreghupdm/netflix:latest "
-                       sh "docker push rahulreghupdm/netflix:latest "
+       stage("Docker Build & Push") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        sh "docker build --build-arg TMDB_V3_API_KEY=49836a14e0518018c5313292 -t netflix ."
+                        sh "docker tag netflix rahulreghupdm/netflix:latest"
+                        sh "docker push rahulreghupdm/netflix:latest"
                     }
                 }
             }
