@@ -11,11 +11,6 @@ pipeline {
     }
 
     stages {
-        stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
-        }
         stage('Docker version check'){
             steps{
                 
@@ -23,7 +18,6 @@ pipeline {
 
             }
         }
-
         stage("SonarQube Analysis") {
             steps {
                 withSonarQubeEnv('sonar-server') {
