@@ -65,12 +65,19 @@ pipeline {
                 sh 'docker run -d --name netflix_container -p 8081:80 rahulreghupdm/netflix:latest'
             }
         }
-        stage('Check kubectl') {
+        stage('Deploy to Kubernetes') {
             steps {
-            sh 'kubectl version --client'
-            sh 'kubectl get nodes'
-            }   
+            sh '''
+                echo "Deploying React app to Kubernetes..."
+
+                kubectl apply -f Kubernetes/deployment.yml
+                kubectl apply -f Kubernetes/service.yml
+
+                echo "Deployment complete. Access the app at any worker node IP on port 30007"
+            '''
         }
+    }
+
 
     }
 
