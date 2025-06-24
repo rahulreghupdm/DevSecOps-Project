@@ -69,8 +69,8 @@ pipeline {
             steps {
             sh 'kubectl version --client'
             sh 'kubectl get nodes'
-    }
-}
+            }   
+        }
 
     }
 
