@@ -35,31 +35,11 @@ pipeline {
                 }
             }
         }
-
-        // stage('Install Dependencies') {
-        //     steps {
-        //         sh "npm install"
-        //     }
-        // }
-
         stage('Trivy FS Scan') {
             steps {
                 sh 'docker run --rm -v $(pwd):/project aquasec/trivy fs /project > trivyfs.txt'
             }
         }
-
-        // stage('OWASP FS SCAN') {
-        //     steps {
-        //         dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-        //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-        //     }
-        // }
-
-       stage("Checkout Code") {
-            steps {
-                checkout scm
-            }
-       }
  
        stage("Docker Build & Push") {
             steps {
@@ -85,6 +65,13 @@ pipeline {
                 sh 'docker run -d --name netflix_container -p 8081:80 rahulreghupdm/netflix:latest'
             }
         }
+        stage('Check kubectl') {
+            steps {
+            sh 'kubectl version --client'
+            sh 'kubectl get nodes'
+    }
+}
+
     }
 
     post {
