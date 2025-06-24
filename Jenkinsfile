@@ -19,6 +19,7 @@ pipeline {
         stage('Docker version check'){
             steps{
                 sh "docker -v"
+
             }
         }
 
@@ -85,7 +86,7 @@ pipeline {
 
         stage('Deploy to Container') {
             steps {
-                sh 'docker run -d -p 8081:80 rahulreghupdm/netflix:latest'
+                sh 'docker run -d --name netflix_container -p 8081:80 rahulreghupdm/netflix:latest'
             }
         }
     }
