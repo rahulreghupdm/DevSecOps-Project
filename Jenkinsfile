@@ -58,6 +58,13 @@ pipeline {
         //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
         //     }
         // }
+
+       stage("Checkout Code") {
+            steps {
+                checkout scm
+            }
+       }
+ 
        stage("Docker Build & Push") {
             steps {
                 script {
