@@ -65,15 +65,10 @@ pipeline {
             }
         }
 
-        stage("Docker Build & Push") {
+        stage('OWASP FS SCAN') {
             steps {
-                script {
-                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                        sh "docker build --build-arg TMDB_V3_API_KEY=49836a14e0518018c5313292 -t netflix ."
-                        sh "docker tag netflix rahulreghupdm/netflix:latest"
-                        sh "docker push rahulreghupdm/netflix:latest"
-                    }
-                }
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
 
