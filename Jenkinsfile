@@ -58,7 +58,17 @@ pipeline {
         //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
         //     }
         // }
-
+       stage("Docker Build & Push"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
+                       sh "docker build --build-arg TMDB_V3_API_KEY=kbsvkusrbrkjbv -t netflix ."
+                       sh "docker tag netflix rahulreghupdm/netflix:latest "
+                       sh "docker push rahulreghupdm/netflix:latest "
+                    }
+                }
+            }
+        }
        stage("Trivy Image Scan") {
             steps {
                 sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image rahulreghupdm/netflix:latest > trivyimage.txt'
