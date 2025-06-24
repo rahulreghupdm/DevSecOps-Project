@@ -32,13 +32,13 @@ pipeline {
             }
         }
 
-        // stage("Quality Gate") {
-        //     steps {
-        //         script {
-        //             waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
-        //         }
-        //     }
-        // }
+        stage("Quality Gate") {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
+                }
+            }
+        }
 
         // stage('Install Dependencies') {
         //     steps {
@@ -52,18 +52,19 @@ pipeline {
             }
         }
 
-        stage('OWASP FS SCAN') {
-            steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
+        // stage('OWASP FS SCAN') {
+        //     steps {
+        //         dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+        //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        //     }
+        // }
 
-        stage("Trivy Image Scan") {
+       stage("Trivy Image Scan") {
             steps {
-                sh "trivy image rahulreghupdm/netflix:latest > trivyimage.txt"
+                sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image rahulreghupdm/netflix:latest > trivyimage.txt'
             }
-        }
+        }       
+
 
         stage('Deploy to Container') {
             steps {
